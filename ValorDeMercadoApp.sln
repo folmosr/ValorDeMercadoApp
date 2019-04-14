@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.27130.2026
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ValorDeMercadoApp", "ValorDeMercadoApp\ValorDeMercadoApp.csproj", "{B31F71C9-EF1A-4E09-A296-14FCABFAA1A0}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{B31F71C9-EF1A-4E09-A296-14FCABFAA1A0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B31F71C9-EF1A-4E09-A296-14FCABFAA1A0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B31F71C9-EF1A-4E09-A296-14FCABFAA1A0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B31F71C9-EF1A-4E09-A296-14FCABFAA1A0}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {8B47F411-945E-4103-BFA5-EC422A17B029}
+	EndGlobalSection
+EndGlobal
