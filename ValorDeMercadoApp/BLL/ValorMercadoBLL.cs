@@ -65,73 +65,93 @@ namespace ValorDeMercadoApp.BLL
             {
                 foreach (ContratroModel contrato in contratos)
                 {
-                    var data = contrato.Data.First();
-                    DataSet dataMercado = _valorMercadoDAO.GetValorMercado(contrato.IdPropiedadArriendo,
-                                                                            data.cantidad,
-                                                                            data.promedio,
-                                                                            data.minimo,
-                                                                            data.maximo,
-                                                                            data.dev_estandar,
-                                                                            data.var_estandar,
-                                                                            data.sup_total_prom);
-                    if ((dataMercado != null) && ((dataMercado.Tables.Count > 0) && (dataMercado.Tables[0].Rows.Count > 0)))
-                    {
-                        DataRowCollection rows = dataMercado.Tables[0].Rows;
-                        foreach (DataRow row in rows)
+                    if (contrato.Data.Count(x=>(x.cantidad > 0 && 
+                                                !string.IsNullOrEmpty(x.promedio) &&
+                                                !string.IsNullOrEmpty(x.minimo) &&
+                                                !string.IsNullOrEmpty(x.maximo) &&
+                                                !string.IsNullOrEmpty(x.dev_estandar) &&
+                                                !string.IsNullOrEmpty(x.var_estandar) &&
+                                                !string.IsNullOrEmpty(x.sup_total_prom)
+                                                )
+                                           ) >  0) {
+                        var data = contrato.Data.First();
+                        DataSet dataMercado = _valorMercadoDAO.GetValorMercado(contrato.IdPropiedadArriendo,
+                                                                                data.cantidad,
+                                                                                data.promedio,
+                                                                                data.minimo,
+                                                                                data.maximo,
+                                                                                data.dev_estandar,
+                                                                                data.var_estandar,
+                                                                                data.sup_total_prom);
+                        if ((dataMercado != null) && ((dataMercado.Tables.Count > 0) && (dataMercado.Tables[0].Rows.Count > 0)))
                         {
-                            var valorMercado = new MercadoModel()
+                            DataRowCollection rows = dataMercado.Tables[0].Rows;
+                            foreach (DataRow row in rows)
                             {
-                                Valor_arr_max_pe = row["valor_arr_max_pe"].ToString(),
-                                Valor_arr_max_uf = row["valor_arr_max_uf"].ToString(),
-                                Valor_arr_min_pe = row["valor_arr_min_pe"].ToString(),
-                                Valor_arr_min_uf = row["valor_arr_min_uf"].ToString(),
-                                Valor_arr_prom_pe = (row["valor_arr_prom_pe"].ToString() == "") ? "0" : row["valor_arr_prom_pe"].ToString(),
-                                Valor_arr_prom_uf = row["valor_arr_prom_uf"].ToString(),
-                                Valor_desv_estandar = row["valor_desv_estandar"].ToString(),
-                                Valor_m2_desv_estandar = row["valor_m2_desv_estandar"].ToString(),
-                                Valor_m2_max = row["valor_m2_max"].ToString(),
-                                Valor_m2_minimo = row["valor_m2_minimo"].ToString(),
-                                Valor_m2_prom = row["valor_m2_prom"].ToString(),
-                                Valor_max = row["valor_max"].ToString(),
-                                Valor_minimo = row["valor_minimo"].ToString(),
-                                Valor_prom = row["valor_prom"].ToString()
-                            };
-                            contrato.Mercado = valorMercado;
+                                var valorMercado = new MercadoModel()
+                                {
+                                    Valor_arr_max_pe = row["valor_arr_max_pe"].ToString(),
+                                    Valor_arr_max_uf = row["valor_arr_max_uf"].ToString(),
+                                    Valor_arr_min_pe = row["valor_arr_min_pe"].ToString(),
+                                    Valor_arr_min_uf = row["valor_arr_min_uf"].ToString(),
+                                    Valor_arr_prom_pe = (row["valor_arr_prom_pe"].ToString() == "") ? "0" : row["valor_arr_prom_pe"].ToString(),
+                                    Valor_arr_prom_uf = row["valor_arr_prom_uf"].ToString(),
+                                    Valor_desv_estandar = row["valor_desv_estandar"].ToString(),
+                                    Valor_m2_desv_estandar = row["valor_m2_desv_estandar"].ToString(),
+                                    Valor_m2_max = row["valor_m2_max"].ToString(),
+                                    Valor_m2_minimo = row["valor_m2_minimo"].ToString(),
+                                    Valor_m2_prom = row["valor_m2_prom"].ToString(),
+                                    Valor_max = row["valor_max"].ToString(),
+                                    Valor_minimo = row["valor_minimo"].ToString(),
+                                    Valor_prom = row["valor_prom"].ToString()
+                                };
+                                contrato.Mercado = valorMercado;
+                                Core.Logger.Instance.LogWriter.Write(new LogEntry()
+                                {
+                                    Message = String.Format(
+                                        "VALORES MERCADO PARA LA PROPIEDAD N° {0} :" + Environment.NewLine +
+                                        "Valor_arr_max_pe : {1}" + Environment.NewLine +
+                                        "Valor_arr_max_uf : {2}" + Environment.NewLine +
+                                        "Valor_arr_min_pe : {3}" + Environment.NewLine +
+                                        "Valor_arr_min_uf : {4}" + Environment.NewLine +
+                                        "Valor_arr_prom_pe : {5}" + Environment.NewLine +
+                                        "Valor_arr_prom_uf : {6}" + Environment.NewLine +
+                                        "Valor_desv_estandar : {7}" + Environment.NewLine +
+                                        "Valor_m2_desv_estandar : {8}" + Environment.NewLine +
+                                        "Valor_m2_max : {9}" + Environment.NewLine +
+                                        "Valor_m2_minimo : {10}" + Environment.NewLine +
+                                        "Valor_m2_prom : {11}" + Environment.NewLine +
+                                        "Valor_max : {12}" + Environment.NewLine +
+                                        "Valor_minimo : {13}" + Environment.NewLine +
+                                        "Valor_prom : {14}" + Environment.NewLine
+                                        ,
+                                        contrato.IdPropiedadArriendo,
+                                        valorMercado.Valor_arr_max_pe,
+                                        valorMercado.Valor_arr_max_uf,
+                                        valorMercado.Valor_arr_min_pe,
+                                        valorMercado.Valor_arr_min_uf,
+                                        valorMercado.Valor_arr_prom_pe,
+                                        valorMercado.Valor_arr_prom_uf,
+                                        valorMercado.Valor_desv_estandar,
+                                        valorMercado.Valor_m2_desv_estandar,
+                                        valorMercado.Valor_m2_max,
+                                        valorMercado.Valor_m2_minimo,
+                                        valorMercado.Valor_m2_prom,
+                                        valorMercado.Valor_max,
+                                        valorMercado.Valor_minimo,
+                                        valorMercado.Valor_prom
+                                     ),
+                                    Categories = new List<string> { "General" },
+                                    Priority = 1,
+                                    ProcessName = Core.Logger.PROCESS_NAME
+                                });
+                            }
+                        }
+                        else
+                        {
                             Core.Logger.Instance.LogWriter.Write(new LogEntry()
                             {
-                                Message = String.Format(
-                                    "VALORES MERCADO PARA LA PROPIEDAD N° {0} :"+ Environment.NewLine +
-                                    "Valor_arr_max_pe : {1}"+ Environment.NewLine +
-                                    "Valor_arr_max_uf : {2}"+ Environment.NewLine +
-                                    "Valor_arr_min_pe : {3}"+ Environment.NewLine +
-                                    "Valor_arr_min_uf : {4}"+ Environment.NewLine +
-                                    "Valor_arr_prom_pe : {5}"+ Environment.NewLine +
-                                    "Valor_arr_prom_uf : {6}"+ Environment.NewLine +
-                                    "Valor_desv_estandar : {7}"+ Environment.NewLine +
-                                    "Valor_m2_desv_estandar : {8}"+ Environment.NewLine +
-                                    "Valor_m2_max : {9}"+ Environment.NewLine +
-                                    "Valor_m2_minimo : {10}"+ Environment.NewLine +
-                                    "Valor_m2_prom : {11}"+ Environment.NewLine +
-                                    "Valor_max : {12}"+ Environment.NewLine +
-                                    "Valor_minimo : {13}" + Environment.NewLine +
-                                    "Valor_prom : {14}"+ Environment.NewLine
-                                    ,
-                                    contrato.IdPropiedadArriendo,
-                                    valorMercado.Valor_arr_max_pe,
-                                    valorMercado.Valor_arr_max_uf,
-                                    valorMercado.Valor_arr_min_pe,
-                                    valorMercado.Valor_arr_min_uf,
-                                    valorMercado.Valor_arr_prom_pe,
-                                    valorMercado.Valor_arr_prom_uf,
-                                    valorMercado.Valor_desv_estandar,
-                                    valorMercado.Valor_m2_desv_estandar,
-                                    valorMercado.Valor_m2_max,
-                                    valorMercado.Valor_m2_minimo,
-                                    valorMercado.Valor_m2_prom,
-                                    valorMercado.Valor_max,
-                                    valorMercado.Valor_minimo,
-                                    valorMercado.Valor_prom
-                                 ),
+                                Message = String.Format("SIN VALORES VALORES MERCADO PARA LA PROPIEDAD:{0}", contrato.IdPropiedadArriendo.ToString()),
                                 Categories = new List<string> { "General" },
                                 Priority = 1,
                                 ProcessName = Core.Logger.PROCESS_NAME
@@ -142,7 +162,7 @@ namespace ValorDeMercadoApp.BLL
                     {
                         Core.Logger.Instance.LogWriter.Write(new LogEntry()
                         {
-                            Message = String.Format("SIN VALORES VALORES MERCADO PARA LA PROPIEDAD:{0}", contrato.IdPropiedadArriendo.ToString()),
+                            Message = String.Format("PARA EL CONTRATO N° :{0}, N° PROPIEDAD {1} NO SE HAYARON VALOR DE MERCADO VALIDO ", contrato.IdContrato, contrato.IdPropiedadArriendo),
                             Categories = new List<string> { "General" },
                             Priority = 1,
                             ProcessName = Core.Logger.PROCESS_NAME
