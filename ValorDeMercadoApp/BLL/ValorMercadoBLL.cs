@@ -37,7 +37,7 @@ namespace ValorDeMercadoApp.BLL
             try
             {
                 foreach (ContratroModel contrato in contratos) {
-                    _valorMercadoDAO.ActualizaValorMercado(contrato.IdContrato, Convert.ToInt32(contrato.Mercado.Valor_arr_prom_pe.Replace(".", String.Empty)));
+                    _valorMercadoDAO.ActualizaValorMercado(contrato.IdContrato, Convert.ToInt32((string.IsNullOrEmpty(contrato.Mercado.Valor_arr_prom_pe))?contrato.Mercado.Valor_arr_prom_pe.Replace(".", String.Empty):"0"));
                     Core.Logger.Instance.LogWriter.Write(new LogEntry()
                     {
                         Message = String.Format("ACTUALIZADO VALOR DE MERCADO CONTRATO N°{0}, PROPIEDAD N° {1}, VALOR {2}", contrato.IdContrato, contrato.IdPropiedadArriendo, contrato.Mercado.Valor_arr_prom_pe),
